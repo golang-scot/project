@@ -22,3 +22,10 @@ _testmain.go
 *.exe
 *.test
 *.prof
+*.pprof
+*.pdf
+*.out
+
+liberty/liberty
+.DS_Store
+vendor/*
