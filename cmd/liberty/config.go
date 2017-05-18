@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"golang.scot/liberty/balancer"
+	"golang.scot/liberty"
 	"golang.scot/liberty/middleware"
 
 	"github.com/spf13/viper"
@@ -44,7 +44,7 @@ type Config struct {
 	Env           string                     `yaml:"env"`
 	Profiling     bool                       `yaml:"profiling"`
 	ProfStatsFile string                     `yaml:"profStatsFile"`
-	Certs         []*balancer.Crt            `yaml:"certs"`
-	Proxies       []*middleware.Proxy        `yaml:"proxies"`
+	Certs         []*liberty.Crt             `yaml:"certs"`
+	Proxies       []*liberty.Proxy           `yaml:"proxies"`
 	Whitelist     []*middleware.ApiWhitelist `yaml:"whitelist"`
 }

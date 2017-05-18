@@ -9,11 +9,12 @@ import (
 	"runtime/pprof"
 	"syscall"
 
+	"golang.scot/liberty"
+
 	"net/http"
 	_ "net/http/pprof"
 
 	"github.com/golang/glog"
-	"golang.scot/liberty/balancer"
 )
 
 const (
@@ -62,16 +63,16 @@ func main() {
 	go func() {
 		http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
 		config := CurrentConfig()
-		balancerConfig := &balancer.Config{
+		balancerConfig := &liberty.Config{
 			Certs:     config.Certs,
 			Proxies:   config.Proxies,
 			Whitelist: config.Whitelist,
 		}
 
-		bl := balancer.NewBalancer(balancerConfig)
+		bl := liberty.NewBalancer(balancerConfig)
 
 		glog.Infoln("Router is bootstrapped, listening for connections...")
-		if err := bl.Balance(balancer.Default); err != nil {
+		if err := bl.Balance(); err != nil {
 			glog.Errorf("Fatal error starting load balancer: %s, %t\n", err, err)
 		}
 	}()
