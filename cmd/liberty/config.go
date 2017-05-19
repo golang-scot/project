@@ -21,7 +21,7 @@ func loadConfig() *Config {
 	v := viper.New()
 	v.SetConfigName(configFile)
 	v.AddConfigPath(configLocation)
-	v.AddConfigPath("/router")
+	v.AddConfigPath("/liberty")
 	err := v.ReadInConfig()
 	if err != nil {
 		fmt.Printf("Fatal error reading liberty config: %s\n", err)
