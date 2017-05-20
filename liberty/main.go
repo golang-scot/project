@@ -25,7 +25,7 @@ import (
 
 func main() {
 	sigs := make(chan os.Signal, 1)
-	done := make(chan bool, 1)
+	exit := make(chan bool, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
 	if cmd.CpuProfile != "" {
@@ -40,12 +40,13 @@ func main() {
 	go func() {
 		sig := <-sigs
 		glog.Info(sig)
-		done <- true
+		exit <- true
 	}()
 
 	cmd.Execute()
 
-	<-done
+	<-exit
+
 	// DO NOT REMOVE
 	glog.Flush()
 }
