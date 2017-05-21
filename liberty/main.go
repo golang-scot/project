@@ -14,39 +14,12 @@
 package main
 
 import (
-	"os"
-	"os/signal"
-	"runtime/pprof"
-	"syscall"
+	"flag"
 
-	"github.com/golang/glog"
 	"golang.scot/project/liberty/cmd"
 )
 
 func main() {
-	sigs := make(chan os.Signal, 1)
-	exit := make(chan bool, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-
-	if cmd.CpuProfile != "" {
-		f, err := os.Create(cmd.CpuProfile)
-		if err != nil {
-			glog.Fatal(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
-
-	go func() {
-		sig := <-sigs
-		glog.Info(sig)
-		exit <- true
-	}()
-
+	flag.Parse()
 	cmd.Execute()
-
-	<-exit
-
-	// DO NOT REMOVE
-	glog.Flush()
 }

@@ -16,6 +16,10 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"runtime/pprof"
+	"syscall"
 
 	"golang.scot/liberty"
 
@@ -29,7 +33,7 @@ var serveCmd = &cobra.Command{
 	Short: "starts liberty proxy in server mode",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("serve called")
+		serve()
 	},
 }
 
@@ -50,6 +54,24 @@ func init() {
 var srvAddr string
 
 func serve() {
+	sigs := make(chan os.Signal, 1)
+	exit := make(chan bool, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+	if CpuProfile != "" {
+		f, err := os.Create(CpuProfile)
+		if err != nil {
+			glog.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
+	go func() {
+		sig := <-sigs
+		fmt.Println(sig)
+		exit <- true
+	}()
 
 	go func() {
 		http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
@@ -61,9 +83,11 @@ func serve() {
 
 		bl := liberty.NewBalancer(balancerConfig)
 
-		glog.Infoln("Router is bootstrapped, listening for connections...")
+		glog.Info("Router is bootstrapped, listening for connections...")
 		if err := bl.Balance(); err != nil {
 			glog.Errorf("Fatal error starting load balancer: %s, %t\n", err, err)
 		}
 	}()
+
+	<-exit
 }
