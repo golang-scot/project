@@ -83,6 +83,7 @@ func initConfig() {
 	} else {
 		viper.SetConfigName(configFile)
 		viper.AddConfigPath(configLocation)
+		viper.AddConfigPath("/liberty")
 	}
 
 	// If a config file is found, read it in.
