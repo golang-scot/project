@@ -57,11 +57,8 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/liberty/liberty.yml)")
-	RootCmd.PersistentFlags().StringVarP(&CpuProfile, "cpuprof", "C", "/tmp/liberty.pprof", "Write CPU profile.")
 
 }
-
-var CpuProfile string
 
 // Config is the top level configuration for this package, at this moment the
 // persisted paramaters are expected to be read from a yaml file.
@@ -70,7 +67,7 @@ type Config struct {
 	Profiling     bool                       `yaml:"profiling"`
 	ProfStatsFile string                     `yaml:"profStatsFile"`
 	Certs         []*liberty.Crt             `yaml:"certs"`
-	Proxies       []*liberty.Proxy           `yaml:"proxies"`
+	Proxies       []*liberty.ReverseProxy    `yaml:"proxies"`
 	Whitelist     []*middleware.ApiWhitelist `yaml:"whitelist"`
 }
 

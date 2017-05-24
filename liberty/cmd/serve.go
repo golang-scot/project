@@ -14,13 +14,6 @@
 package cmd
 
 import (
-	"fmt"
-	"net/http"
-	"os"
-	"os/signal"
-	"runtime/pprof"
-	"syscall"
-
 	"golang.scot/liberty"
 
 	"github.com/golang/glog"
@@ -54,40 +47,15 @@ func init() {
 var srvAddr string
 
 func serve() {
-	sigs := make(chan os.Signal, 1)
-	exit := make(chan bool, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
-	if CpuProfile != "" {
-		f, err := os.Create(CpuProfile)
-		if err != nil {
-			glog.Fatal(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
+	balancerConfig := &liberty.Config{
+		Certs:     cfg.Certs,
+		Proxies:   cfg.Proxies,
+		Whitelist: cfg.Whitelist,
 	}
 
-	go func() {
-		sig := <-sigs
-		fmt.Println(sig)
-		exit <- true
-	}()
+	bl := liberty.NewProxy(balancerConfig)
 
-	go func() {
-		http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
-		balancerConfig := &liberty.Config{
-			Certs:     cfg.Certs,
-			Proxies:   cfg.Proxies,
-			Whitelist: cfg.Whitelist,
-		}
-
-		bl := liberty.NewBalancer(balancerConfig)
-
-		glog.Info("Router is bootstrapped, listening for connections...")
-		if err := bl.Balance(); err != nil {
-			glog.Errorf("Fatal error starting load balancer: %s, %t\n", err, err)
-		}
-	}()
-
-	<-exit
+	glog.Info("Router is bootstrapped, listening for connections...")
+	bl.Serve()
 }
