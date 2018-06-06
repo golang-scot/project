@@ -1,1 +1,0 @@
-FROM zzrot/alpine-caddy

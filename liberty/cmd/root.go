@@ -29,8 +29,6 @@ const (
 	configLocation = "/etc/liberty"
 )
 
-var cfgFile string
-
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
 	Use:   "liberty",
@@ -56,7 +54,6 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/liberty/liberty.yml)")
 
 }
 
@@ -84,9 +81,12 @@ func initConfig() {
 	}
 
 	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		fmt.Printf("invlid config file: %s\n", viper.ConfigFileUsed())
+		fmt.Println(err)
 	}
+
+	fmt.Println("Using config file:", viper.ConfigFileUsed())
 	viper.AutomaticEnv() // read in environment variables that match
 	viper.Unmarshal(cfg)
 }

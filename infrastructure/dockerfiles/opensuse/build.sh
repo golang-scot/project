@@ -28,15 +28,16 @@ echo "Downloading Go version ${gover}..."
 # now grab the Go version
 cd $(mktemp -d)
 curl -O $goloc
-tar -C $DIR -xzf go${gover}.linux-amd64.tar.gz
-rm -r $(pwd)
+echo "Installing Go version ${gover}..."
+sudo tar -C $DIR -xzf go${gover}.linux-amd64.tar.gz
 
 # build the container image
+echo "Building container..."
 if [ "$appenv" = "go" ] ; then
 	docker build --rm -t registry.golang.scot/go:${gover} $DIR
 else
 	docker build --rm -t registry.golang.scot/go:${appenv} -f $DIR/${appenv}.Dockerfile $DIR
 fi
 
+echo "Cleaning up..."
 # cleanup
-rm -r $DIR/go

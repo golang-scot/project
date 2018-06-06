@@ -29,6 +29,7 @@ var serveCmd = &cobra.Command{
 		serve()
 	},
 }
+var cfgFile string
 
 func init() {
 	RootCmd.AddCommand(serveCmd)
@@ -42,6 +43,7 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	serveCmd.Flags().StringVarP(&srvAddr, "address", "a", "all", "IP address to bind to.")
+	serveCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is /etc/liberty/liberty.yml)")
 }
 
 var srvAddr string

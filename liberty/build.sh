@@ -1,24 +1,24 @@
 #! /bin/bash
 
-verbose='false'
-appenv=''
+verbose=false
+release=''
 push=false
 
-while getopts 'e:pv' flag; do
+while getopts 'r:pv' flag; do
   case "${flag}" in
-    e) appenv="${OPTARG}" ;;
+    r) release="${OPTARG}" ;;
     p) push=true ;;
-    v) verbose='true' ;;
+    v) verbose=true ;;
     *) error "Unexpected option ${flag}" ;;
   esac
 done
 
-[[ -z "$appenv" ]] && { echo "You must give supply the 'appenv' '-e' argument" ; exit 1; }
+[[ -z "$release" ]] && { echo "You must give supply the 'release' '-r' argument" ; exit 1; }
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR
 go build .
-docker build --rm -t registry.golang.scot/liberty:${appenv} -f $DIR/${appenv}.Dockerfile $DIR
+docker build --rm -t registry.golang.scot/liberty:${release} -f $DIR/Dockerfile $DIR
 
 if [ "$push" = true ] ; then
-	docker push registry.golang.scot/liberty:${appenv}
+	docker push registry.golang.scot/liberty:${release}
 fi

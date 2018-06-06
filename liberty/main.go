@@ -14,12 +14,24 @@
 package main
 
 import (
+	"crypto/tls"
 	"flag"
+	"fmt"
+	"net/http"
 
+	"github.com/spf13/pflag"
 	"golang.scot/project/liberty/cmd"
 )
 
+func init() {
+	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+	flag.CommandLine.Parse([]string{})
+}
+
 func main() {
-	flag.Parse()
+	fmt.Println("WARNING - CLIENT TLS SKIP VERIFY")
+	http.DefaultTransport = &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
 	cmd.Execute()
 }
