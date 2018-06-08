@@ -2,15 +2,13 @@ workspace:
   base: /go
   path: src/golang.scot/project
 
-
 pipeline:
   tests:
     image: golang:${GO_VERSION}
     commands:
-      - go get -u -v golang.org/x/vgo
+      - go get -u golang.org/x/vgo
       - cd liberty && vgo test ./...  && vgo build .
 
 matrix:
   GO_VERSION:
-    - 1.9.6
     - 1.10.2
