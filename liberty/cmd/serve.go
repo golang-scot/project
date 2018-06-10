@@ -34,14 +34,6 @@ var cfgFile string
 func init() {
 	RootCmd.AddCommand(serveCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serveCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	serveCmd.Flags().StringVarP(&srvAddr, "address", "a", "all", "IP address to bind to.")
 	serveCmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is /etc/liberty/liberty.yml)")
 }
