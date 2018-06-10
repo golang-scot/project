@@ -14,9 +14,7 @@ pipeline:
     repo: registry.golang.scot/liberty
     dockerfile: liberty/Dockerfile
     secrets: [ docker_username, docker_password ]
-    when:
-        event: tag
-        branch: master
+    auto_tag: true
 
 matrix:
   GO_VERSION:
