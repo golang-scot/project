@@ -9,6 +9,15 @@ pipeline:
       - go get -u golang.org/x/vgo
       - cd liberty && vgo test ./...  && vgo build .
 
+  docker-liberty:
+    image: plugins/docker
+    repo: registry.golang.scot/liberty
+    dockerfile: liberty/Dockerfile
+    secrets: [ docker_username, docker_password ]
+    when:
+        event: tag
+        branch: master
+
 matrix:
   GO_VERSION:
     - 1.10.2
