@@ -1,2 +1,3 @@
 # project
-project infrastructure
+project infrastructure, but mostly right now just program that serves a reverse
+proxy...
