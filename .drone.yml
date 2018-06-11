@@ -3,7 +3,7 @@ workspace:
   path: src/golang.scot/project
 
 pipeline:
-  tests:
+  build:
     image: golang:${GO_VERSION}
     commands:
       - go get -u golang.org/x/vgo
@@ -15,8 +15,7 @@ pipeline:
     registry: registry.golang.scot
     dockerfile: liberty/Dockerfile
     secrets: [ docker_username, docker_password ]
-    auto_tag: true
-    tags: "${DRONE_TAG##v}"
+    tags: latest
 
   publish-tags:
     image: plugins/docker
