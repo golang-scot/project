@@ -16,6 +16,7 @@ pipeline:
     dockerfile: liberty/Dockerfile
     secrets: [ docker_username, docker_password ]
     auto_tag: true
+    tags: "${DRONE_TAG##v}"
 
 matrix:
   GO_VERSION:
