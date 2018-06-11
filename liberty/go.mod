@@ -15,6 +15,6 @@ require (
 	github.com/spf13/viper v1.0.2
 	golang.org/x/sys v0.0.0-20180606202747-9527bec2660b
 	golang.org/x/text v0.3.0
-	golang.scot/liberty v0.0.0-20170628112704-e63972dec8db
+	golang.scot/liberty v0.1.0
 	gopkg.in/yaml.v2 v2.2.1
 )
