@@ -12,6 +12,7 @@ pipeline:
   docker-liberty:
     image: plugins/docker
     repo: registry.golang.scot/liberty
+    registry: registry.golang.scot
     dockerfile: liberty/Dockerfile
     secrets: [ docker_username, docker_password ]
     auto_tag: true
