@@ -1,10 +1,5 @@
 FROM opensuse:latest
 
-ENV  PATH $PATH:/usr/local/go/bin
-
-RUN mkdir -p /usr/local/go; \
-zypper install --no-confirm curl tar git libcap-progs && zypper clean --all
-
-COPY go/ /usr/local/go
+RUN zypper install --no-confirm curl tar libcap-progs && zypper clean --all
 
 CMD ["/sbin/init"]

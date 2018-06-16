@@ -1,8 +1,9 @@
-FROM registry.golang.scot/systemd:latest
+FROM registry.golang.scot/opensuse:latest
 
 ENV APP_ENV prod
 
-COPY liberty /usr/local/bin/
+COPY liberty /liberty-proxy
 
-EXPOSE 80 443
-CMD ["/usr/local/bin/liberty", "serve"]
+RUN setcap 'cap_net_bind_service=+ep' /liberty-proxy
+
+CMD ["/liberty-proxy", "serve"]

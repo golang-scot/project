@@ -23,7 +23,9 @@ pipeline:
     registry: registry.golang.scot
     dockerfile: liberty/Dockerfile
     secrets: [ docker_username, docker_password ]
-    tags: "${DRONE_TAG##v}"
+    tags:
+      - "${DRONE_TAG##v}"
+      - latest
     when:
         event: tag
 
