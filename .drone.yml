@@ -9,6 +9,11 @@ pipeline:
       - go get -u golang.org/x/vgo
       - cd liberty && vgo test ./...  && vgo build .
 
+  setcap:
+    image: registry.golang.scot/opensuse:latest
+    commands:
+      - setcap 'cap_net_bind_service=+ep' liberty
+
   publish-latest:
     image: plugins/docker
     privileged: true
